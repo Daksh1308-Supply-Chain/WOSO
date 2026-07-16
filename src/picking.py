@@ -34,3 +34,16 @@ class PickingProcess:
         travel_time = distance / walking_speed
         pick_time = len(order.items) * self.config.picking_speed
         return travel_time + pick_time
+
+    def calculate_agv_picking_time(self, order: Order) -> float:
+        distance = self.calculate_travel_distance(order.items)
+        travel_time = distance / self.config.agv_speed
+        pick_time = len(order.items) * self.config.agv_pick_speed
+        return travel_time + pick_time
+
+    def calculate_robot_picking_time(self, order: Order) -> float:
+        distance = self.calculate_travel_distance(order.items)
+        robot_distance_mult = 0.6
+        travel_time = (distance * robot_distance_mult) / self.config.walking_speed
+        pick_time = len(order.items) * self.config.robot_pick_speed
+        return travel_time + pick_time

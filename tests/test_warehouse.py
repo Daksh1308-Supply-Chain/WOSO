@@ -41,12 +41,17 @@ def test_kpis_computed():
     sim = WarehouseSimulation(config)
     sim.run()
     total_time = config.working_hours * 60
+    cost_summary = sim.cost_tracker.get_summary()
     analytics = Analytics(config)
-    kpis = analytics.compute_kpis(sim.orders, sim.completed_orders, total_time, 0.0)
+    kpis = analytics.compute_kpis(sim.orders, sim.completed_orders, total_time, 0.0, cost_summary)
     assert 'orders_completed' in kpis
     assert 'avg_completion_time' in kpis
     assert 'worker_utilization' in kpis
     assert kpis['orders_completed'] <= len(sim.orders)
+    assert 'cost_total_cost' in kpis
+    assert 'cost_cost_per_order' in kpis
+    assert 'cost_labor_cost' in kpis
+    assert kpis['cost_total_cost'] > 0
 
 def test_reproducibility():
     config1 = SimulationConfig(random_seed=123)

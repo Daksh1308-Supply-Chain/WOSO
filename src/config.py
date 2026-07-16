@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 import random
+from src.costing import CostConfig
 
 ORDER_PENDING = "pending"
 ORDER_PICKING = "picking"
@@ -73,6 +74,32 @@ class SimulationConfig:
     receiving_dock: Tuple[float, float] = (0.0, 0.0)
     shipping_dock: Tuple[float, float] = (300.0, 0.0)
     packing_station_location: Tuple[float, float] = (150.0, 0.0)
+
+    num_agvs: int = 0
+    agv_speed: float = 100.0
+    agv_pick_speed: float = 0.3
+    agv_battery_capacity: float = 100.0
+    agv_charge_rate: float = 10.0
+    num_charging_stations: int = 2
+    agv_charge_interval: float = 45.0
+    agv_charge_duration: float = 5.0
+    agv_mode: str = "disabled"
+    agv_distance_threshold: float = 200.0
+
+    num_robot_pickers: int = 0
+    robot_pick_speed: float = 0.2
+    robot_maintenance_interval: float = 120.0
+    robot_maintenance_duration: float = 10.0
+    robot_mode: str = "disabled"
+    robot_high_volume_count: int = 10
+
+    enable_forecasting: bool = False
+    forecast_training_runs: int = 5
+
+    enable_ml_scheduling: bool = False
+    ml_scheduling_training_runs: int = 30
+
+    cost_config: CostConfig = field(default_factory=CostConfig)
 
     shifts: List[Shift] = field(default_factory=lambda: [
         Shift(name="Default Shift", start_hour=0.0, end_hour=8.0, break_start=None, break_duration=0.5)
